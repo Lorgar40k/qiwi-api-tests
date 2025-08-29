@@ -1,0 +1,382 @@
+{
+	"info": {
+		"_postman_id": "03fcf04b-9d74-449f-b6dc-8d0f2415a607",
+		"name": "QIWI Тестовое",
+		"description": "Тесты доступности и формата API QIWI Payout (по документации). Сервис может не работать.",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "40908715"
+	},
+	"item": [
+		{
+			"name": "Get all payments (basic)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Response is JSON\", function () {",
+							"    pm.response.to.have.header(\"Content-Type\");",
+							"    pm.response.to.be.withBody;",
+							"    pm.response.to.be.json;",
+							"});",
+							"",
+							"pm.test(\"Response is array\", function () {",
+							"    var data = pm.response.json();",
+							"    pm.expect(data).to.be.an('array');",
+							"});",
+							"",
+							"if (pm.response.code === 200) {",
+							"    let payment = pm.response.json()[0];",
+							"    pm.expect(payment).to.have.property('paymentId');",
+							"    pm.expect(payment).to.have.property('status');",
+							"    pm.expect(payment).to.have.property('amount');",
+							"}"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json"
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer {{token}}"
+					}
+				],
+				"url": {
+					"raw": "{{baseUrl}}/partner/payout/v1/agents/{{agentId}}/points/{{pointId}}/payments",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"partner",
+						"payout",
+						"v1",
+						"agents",
+						"{{agentId}}",
+						"points",
+						"{{pointId}}",
+						"payments"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get payments with limit=1",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"let data = pm.response.json();",
+							"pm.test(\"Only 1 payment returned\", function () {",
+							"    pm.expect(data.length).to.eql(1);",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json"
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer {{token}}"
+					}
+				],
+				"url": {
+					"raw": "{{baseUrl}}/partner/payout/v1/agents/{{agentId}}/points/{{pointId}}/payments?limit=1",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"partner",
+						"payout",
+						"v1",
+						"agents",
+						"{{agentId}}",
+						"points",
+						"{{pointId}}",
+						"payments"
+					],
+					"query": [
+						{
+							"key": "limit",
+							"value": "1"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Unauthorized request",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 401 Unauthorized\", function () {",
+							"    pm.response.to.have.status(401);",
+							"});",
+							"",
+							"pm.test(\"Response is CommonError object\", function () {",
+							"    let err = pm.response.json();",
+							"    pm.expect(err).to.have.property('errorCode');",
+							"    pm.expect(err).to.have.property('userMessage');",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json"
+					},
+					{
+						"key": "Key: Authorization",
+						"value": "Bearer {{token}}",
+						"type": "text"
+					},
+					{
+						"key": "Key",
+						"value": "Authorization: Bearer {{token}}"
+					}
+				],
+				"url": {
+					"raw": "{{baseUrl}}/partner/payout/v1/agents/{{agentId}}/points/{{pointId}}/payments",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"partner",
+						"payout",
+						"v1",
+						"agents",
+						"{{agentId}}",
+						"points",
+						"{{pointId}}",
+						"payments"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Balance.",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Key: Accept",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer {{token}}",
+						"type": "text"
+					},
+					{
+						"key": "Key",
+						"value": "Accept: application/json"
+					}
+				],
+				"url": {
+					"raw": "{{baseUrl}}/partner/payout/v1/agents/{{agentId}}/points/{{pointId}}/balance\n",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"partner",
+						"payout",
+						"v1",
+						"agents",
+						"{{agentId}}",
+						"points",
+						"{{pointId}}",
+						"balance\n"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Payment",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "Authorization:",
+						"value": "Bearer {{token}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "https://api.qiwi.com/partner/payout/v1/agents/acme/points/00001/payments/{{paymentId}}/execute\n",
+					"protocol": "https",
+					"host": [
+						"api",
+						"qiwi",
+						"com"
+					],
+					"path": [
+						"partner",
+						"payout",
+						"v1",
+						"agents",
+						"acme",
+						"points",
+						"00001",
+						"payments",
+						"{{paymentId}}",
+						"execute\n"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "InitPayment",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer {{token}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "https://api.qiwi.com/partner/payout/v1/agents/acme/points/00001/payments/{{paymentId}}/execute\n",
+					"protocol": "https",
+					"host": [
+						"api",
+						"qiwi",
+						"com"
+					],
+					"path": [
+						"partner",
+						"payout",
+						"v1",
+						"agents",
+						"acme",
+						"points",
+						"00001",
+						"payments",
+						"{{paymentId}}",
+						"execute\n"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"variable": [
+		{
+			"key": "baseUrl",
+			"value": "https://api.qiwi.com"
+		},
+		{
+			"key": "agentId",
+			"value": "acme"
+		},
+		{
+			"key": "pointId",
+			"value": "00001"
+		},
+		{
+			"key": "token",
+			"value": "<YOUR_TOKEN>"
+		}
+	]
+}
