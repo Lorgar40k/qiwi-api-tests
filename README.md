@@ -7,11 +7,11 @@
 
 ## Установка ▶️
 
-
+```bash
 git clone https://github.com/Lorgar40k/qiwi-api-tests
 cd qiwi-tests
 npm install
-
+```
 
 ---
 
@@ -19,10 +19,19 @@ npm install
 
 Перед запуском необходимо выставить переменные окружения:
 
-
+```bash
 export QIWI_API_KEY="your_api_key_here"        # 🔑 API ключ
 export QIWI_AGENT_ID="your_agent_id"           # 🏷️ ID агента
 export QIWI_POINT_ID="your_point_id"           # 📍 ID точки
+```
+
+(Windows PowerShell):
+
+```powershell
+$env:QIWI_API_KEY="your_api_key_here"
+$env:QIWI_AGENT_ID="your_agent_id"
+$env:QIWI_POINT_ID="your_point_id"
+```
 
 ---
 
@@ -30,27 +39,18 @@ export QIWI_POINT_ID="your_point_id"           # 📍 ID точки
 
 ### Через Playwright Test 🚀
 
-
+```bash
 npx playwright test
-
+```
 
 ### Через Newman (Postman CLI) 📝
 
-
+```bash
 npx newman run ./postman_collection.json \
   --env-var QIWI_API_KEY=$QIWI_API_KEY \
   --env-var QIWI_AGENT_ID=$QIWI_AGENT_ID \
   --env-var QIWI_POINT_ID=$QIWI_POINT_ID
-
-
----
-
-## Отчёты 📊
-
-После запуска Playwright формирует отчёт. Чтобы открыть:
-
-
-npx playwright show-report
+```
 
 ---
 
@@ -63,6 +63,3 @@ qiwi-tests/
 │── package.json             # 📦 Зависимости
 │── README.md                # 📖 Документация
 ```
-
----
-
